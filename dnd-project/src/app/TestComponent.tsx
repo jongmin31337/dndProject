@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react";
-import { Card } from "./Card";
+import React, { useCallback, useRef, useState } from "react";
+import { Card, ItemTypes } from "./Card";
+import { useDrop } from "react-dnd";
 
 export interface Item {
   id: number;
@@ -7,7 +8,9 @@ export interface Item {
 }
 
 const style = {
+  display: "flex",
   width: 400,
+  gap: 10,
 };
 
 export default function TestComponent() {
@@ -42,19 +45,27 @@ export default function TestComponent() {
     },
   ]);
 
-  const moveCard = useCallback((dragIndex: number, hoverIndex: number) => {
-    setCards((prevCards: Item[]) => {
-      const updatedCards = [...prevCards]; // 카드 배열의 복사본을 만듭니다.
+  const findCard = useCallback(
+    (id: any) => {
+      const card = cards.filter((c) => `${c.id}` === id)[0];
+      return {
+        card,
+        index: cards.indexOf(card),
+      };
+    },
+    [cards]
+  );
 
-      // 드래그된 카드를 현재 위치에서 제거합니다.
-      const [draggedCard] = updatedCards.splice(dragIndex, 1);
-
-      // 드래그된 카드를 hoverIndex에 삽입합니다.
-      updatedCards.splice(hoverIndex, 0, draggedCard);
-
-      return updatedCards; // 업데이트된 배열을 반환합니다.
-    });
-  }, []);
+  const moveCard = useCallback(
+    (id: number, atIndex: number) => {
+      const { card, index } = findCard(id);
+      const newCards = [...cards];
+      newCards.splice(index, 1);
+      newCards.splice(atIndex, 0, card);
+      setCards(newCards);
+    },
+    [findCard, cards]
+  );
 
   const renderCard = useCallback(
     (card: { id: number; text: string }, index: number) => {
@@ -70,6 +81,21 @@ export default function TestComponent() {
     },
     []
   );
+  const ref = useRef<HTMLDivElement>(null);
+  const [, drop] = useDrop(() => ({ accept: ItemTypes.CARD }));
+  drop(ref);
 
-  return <div style={style}>{cards.map((card, i) => renderCard(card, i))}</div>;
+  return (
+    <div ref={ref} style={style}>
+      {cards.map((card) => (
+        <Card
+          key={card.id}
+          id={`${card.id}`}
+          text={card.text}
+          moveCard={moveCard}
+          findCard={findCard}
+        />
+      ))}
+    </div>
+  );
 }
