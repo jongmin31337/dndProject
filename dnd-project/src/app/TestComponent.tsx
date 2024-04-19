@@ -9,7 +9,7 @@ export interface Item {
 
 const style = {
   display: "flex",
-  width: 400,
+  width: 1000,
   gap: 10,
 };
 
@@ -67,20 +67,6 @@ export default function TestComponent() {
     [findCard, cards]
   );
 
-  const renderCard = useCallback(
-    (card: { id: number; text: string }, index: number) => {
-      return (
-        <Card
-          key={card.id}
-          index={index}
-          id={card.id}
-          text={card.text}
-          moveCard={moveCard}
-        />
-      );
-    },
-    []
-  );
   const ref = useRef<HTMLDivElement>(null);
   const [, drop] = useDrop(() => ({ accept: ItemTypes.CARD }));
   drop(ref);

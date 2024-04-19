@@ -11,8 +11,7 @@ const style = {
 export const ItemTypes = {
   CARD: "card",
 };
-
-export const Card = memo(function Card({ id, text, moveCard, findCard }: any) {
+export const Card = memo(function Card({ id, text, moveCard, findCard }) {
   const originalIndex = findCard(id).index;
   const [{ isDragging }, drag] = useDrag(
     () => ({
@@ -43,9 +42,7 @@ export const Card = memo(function Card({ id, text, moveCard, findCard }: any) {
     }),
     [findCard, moveCard]
   );
-
   const opacity = isDragging ? 0 : 1;
-
   return (
     <div ref={(node) => drag(drop(node))} style={{ ...style, opacity }}>
       {text}
