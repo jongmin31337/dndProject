@@ -271,13 +271,24 @@ export default function TodoLibraryExample() {
   };
 
   const onDragUpdate = (result: DragUpdate) => {
-    console.log(result);
-    return false;
     const destination = result.destination?.droppableId;
-    const destinationIndex = result.destination?.index;
-    const draggableId = result.draggableId;
+    const source = result.source?.droppableId;
 
-    const test = ITEMS.find((item) => item.id === draggableId);
+    console.log('destination', destination);
+    console.log('source', source);
+
+
+
+    // if(source && destination) {
+    //   const sourceList = lists[source];
+    //   const destinationList = lists[destination];
+
+    //   setLists({
+    //     ...lists,
+    //     [source]: destinationList,
+    //     [destination]: sourceList,
+    //   });
+    // }
     // console.log("result.destination", result.destination);
     // console.log("destination", destination);
     // console.log("test", test);
