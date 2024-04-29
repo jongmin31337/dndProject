@@ -317,82 +317,81 @@ export default function TodoLibraryExample() {
   }
 
   return (
-    <Test />
-    // <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
-    //   <Droppable droppableId="ITEMS" isDropDisabled={true}>
-    //     {(provided, snapshot) => (
-    //       <div
-    //         className={KioskClassName(snapshot.isDraggingOver)}
-    //         ref={provided.innerRef}
-    //       >
-    //         {ITEMS.map((item, index) => (
-    //           <Draggable
-    //             key={item.id}
-    //             draggableId={item.id}
-    //             index={index}
-    //             isDragDisabled={item.isActive === true}
-    //           >
-    //             {(provided, snapshot) => (
-    //               <>
-    //                 <div
-    //                   ref={provided.innerRef}
-    //                   {...provided.draggableProps}
-    //                   {...provided.dragHandleProps}
-    //                   style={{
-    //                     ...provided.draggableProps.style,
-    //                   }}
-    //                 >
-    //                   <Item item={item} />
-    //                 </div>
-    //                 {snapshot.isDragging && <Clone item={item} />}
-    //               </>
-    //             )}
-    //           </Draggable>
-    //         ))}
-    //         {provided.placeholder}
-    //       </div>
-    //     )}
-    //   </Droppable>
-    //   <div className="grid grid-cols-3 gap-x-10 gap-y-10 w-[800px] h-[600px]">
-    //     {Object.keys(lists).map((list, i) => (
-    //       <Droppable key={list} droppableId={list}>
-    //         {(provided, snapshot) => (
-    //           <div
-    //             ref={provided.innerRef}
-    //             className={containerClassName(
-    //               lists,
-    //               list,
-    //               snapshot.isDraggingOver,
-    //               i
-    //             )}
-    //           >
-    //             {lists[list].length
-    //               ? lists[list].map((item, index) => (
-    //                   <Draggable
-    //                     key={item.id}
-    //                     draggableId={item.id}
-    //                     index={index}
-    //                   >
-    //                     {(provided, snapshot) => (
-    //                       <div
-    //                         ref={provided.innerRef}
-    //                         {...provided.draggableProps}
-    //                         // isDragging={snapshot.isDragging}
-    //                       >
-    //                         <div {...provided.dragHandleProps}>
-    //                           <Item item={item} />
-    //                         </div>
-    //                       </div>
-    //                     )}
-    //                   </Draggable>
-    //                 ))
-    //               : !provided.placeholder && <Notice>Drop items here</Notice>}
-    //             {provided.placeholder}
-    //           </div>
-    //         )}
-    //       </Droppable>
-    //     ))}
-    //   </div>
-    // </DragDropContext>
+    <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
+      <Droppable droppableId="ITEMS" isDropDisabled={true}>
+        {(provided, snapshot) => (
+          <div
+            className={KioskClassName(snapshot.isDraggingOver)}
+            ref={provided.innerRef}
+          >
+            {ITEMS.map((item, index) => (
+              <Draggable
+                key={item.id}
+                draggableId={item.id}
+                index={index}
+                isDragDisabled={item.isActive === true}
+              >
+                {(provided, snapshot) => (
+                  <>
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      style={{
+                        ...provided.draggableProps.style,
+                      }}
+                    >
+                      <Item item={item} />
+                    </div>
+                    {snapshot.isDragging && <Clone item={item} />}
+                  </>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      <div className="grid grid-cols-3 gap-x-10 gap-y-10 w-[800px] h-[600px]">
+        {Object.keys(lists).map((list, i) => (
+          <Droppable droppableId={list}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                className={containerClassName(
+                  lists,
+                  list,
+                  snapshot.isDraggingOver,
+                  i
+                )}
+              >
+                {lists[list].length
+                  ? lists[list].map((item, index) => (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            // isDragging={snapshot.isDragging}
+                          >
+                            <div {...provided.dragHandleProps}>
+                              <Item item={item} />
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))
+                  : !provided.placeholder && <Notice>Drop items here</Notice>}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        ))}
+      </div>
+    </DragDropContext>
   );
 }

@@ -67,10 +67,6 @@ export default function TestComponent() {
     [findCard, cards]
   );
 
-<<<<<<< HEAD
-=======
-
->>>>>>> aa58c8691f4b6cc8d2baa4fbb73389d070db6a4e
   const ref = useRef<HTMLDivElement>(null);
   const [, drop] = useDrop(() => ({ accept: ItemTypes.CARD }));
   drop(ref);
