@@ -11,13 +11,14 @@ const style = {
   fontSize: "1rem",
   lineHeight: "normal",
   float: "left",
+  cursor: "move",
 };
 export const Dustbin = memo(function Dustbin({
   accept,
   lastDroppedItem,
   onDrop,
   key,
-}) {
+}: any) {
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: "Test",
@@ -26,7 +27,6 @@ export const Dustbin = memo(function Dustbin({
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
-        console.log(item);
         const didDrop = monitor.didDrop();
         if (!didDrop) {
           //moveCard(droppedId, originalIndex);
@@ -45,18 +45,16 @@ export const Dustbin = memo(function Dustbin({
     }),
   });
   const isActive = isOver && canDrop;
+
   let backgroundColor = "#222";
   if (isActive) {
     backgroundColor = "darkgreen";
   } else if (canDrop) {
     backgroundColor = "darkkhaki";
   }
+
   return (
-    <div
-      ref={(node) => drag(drop(node))}
-      style={{ ...style, backgroundColor }}
-      data-testid="dustbin"
-    >
+    <div ref={(node) => drag(drop(node))} style={{ ...style, backgroundColor }}>
       {isActive
         ? "Release to drop"
         : `This dustbin accepts: ${accept.join(", ")}`}

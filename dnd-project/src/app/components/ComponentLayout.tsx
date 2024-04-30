@@ -20,42 +20,30 @@ export const ComponentLayout = memo(function Container() {
     { accepts: [ItemTypes.PAPER, NativeTypes.FILE], lastDroppedItem: null },
   ]);
 
-  const [boxes] = useState([
+  const [boxes, setBoxes] = useState([
     { name: "ONE1", type: ItemTypes.One },
     { name: "ONE2", type: ItemTypes.One },
     { name: "TWO", type: ItemTypes.Two },
   ]);
 
-  const [droppedBoxNames, setDroppedBoxNames] = useState([]);
+  const handleDrop = useCallback((index, item) => {
+    setDustbins((prevDustbins) => {
+      const newDustbins = [...prevDustbins];
+      newDustbins[index].lastDroppedItem = item;
+      return newDustbins;
+    });
 
-  function isDropped(boxName) {
-    return droppedBoxNames.indexOf(boxName) > -1;
-  }
-  const handleDrop = useCallback(
-    (index, item) => {
-      const { name } = item;
-      setDroppedBoxNames((prevDroppedBoxNames) => {
-        if (name) {
-          return [...prevDroppedBoxNames, name];
-        } else {
-          return prevDroppedBoxNames;
-        }
-      });
+    setBoxes((prevBoxes) => {
+      const newBoxes = [...prevBoxes];
+      const droppedBox = newBoxes.find((box) => box.name === item.name);
+      const droppedBoxIndex = newBoxes.indexOf(droppedBox);
+      const prevDroppedItem = newBoxes[index];
+      newBoxes[index] = droppedBox;
+      newBoxes[droppedBoxIndex] = prevDroppedItem;
+      return newBoxes;
+    });
+  }, []);
 
-      setDustbins((prevDustbins) => {
-        return prevDustbins.map((dustbin, idx) => {
-          if (idx === index) {
-            return {
-              ...dustbin,
-              lastDroppedItem: item,
-            };
-          }
-          return dustbin;
-        });
-      });
-    },
-    [droppedBoxNames, dustbins]
-  );
   return (
     <div>
       <div style={{ overflow: "hidden", clear: "both" }}>
@@ -71,7 +59,12 @@ export const ComponentLayout = memo(function Container() {
 
       <div style={{ overflow: "hidden", clear: "both" }}>
         {boxes.map(({ name, type }, index) => (
-          <Box name={name} type={type} key={index} />
+          <Box
+            name={name}
+            type={type}
+            key={index}
+            onDrop={(item) => handleDrop(index, item)}
+          />
         ))}
       </div>
     </div>
